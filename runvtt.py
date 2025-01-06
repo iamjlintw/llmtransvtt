@@ -258,15 +258,37 @@ class WebVTTTranslator:
         total_batches = len(batches)
 
         print(f"\n總共分成 {total_batches} 個批次進行翻譯")
-
+        
+        # 追蹤每分鐘的請求數
+        request_times = []
+        
         with tqdm(total=total_batches, desc="翻譯進度") as pbar:
             for batch in batches:
                 try:
+                    # 檢查並控制請求頻率
+                    current_time = asyncio.get_event_loop().time()
+                    # 清理超過1分鐘的請求記錄
+                    request_times = [t for t in request_times if current_time - t < 60]
+                    
+                    # 如果已達到每分鐘限制，等待適當時間
+                    if len(request_times) >= 10:
+                        wait_time = 60 - (current_time - request_times[0])
+                        if wait_time > 0:
+                            await asyncio.sleep(wait_time)
+                    
+                    # 執行翻譯
                     await self.translate_batch(batch, target_lang)
-                    # 添加延遲以避免 API 限制
-                    await asyncio.sleep(2)
+                    
+                    # 記錄這次請求的時間
+                    request_times.append(asyncio.get_event_loop().time())
+                    
+                    # 基本延遲 6 秒
+                    await asyncio.sleep(6)
+                    
                 except Exception as e:
                     print(f"\n批次翻譯出錯: {str(e)}")
+                    # 發生錯誤時增加延遲
+                    await asyncio.sleep(10)
                     continue
                 finally:
                     pbar.update(1)

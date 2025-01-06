@@ -1,6 +1,7 @@
-# VTT 字幕處理工具
+# VTT 字幕翻譯處理工具
 
-這是一個用於處理 VTT 字幕檔案的 Python 工具。
+這是一個用於英翻中的處理 VTT 字幕檔案的 Python 工具。基於DeepSeek Chat 的API 開發 ,可以使用openai 相容的API 
+目前測試過DeepSeek ,Gemini  的API ，可以正常使用。
 
 ## 安裝說明
 
