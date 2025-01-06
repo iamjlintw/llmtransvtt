@@ -306,8 +306,13 @@ async def main():
         print("請指定輸入檔案，例如: python script.py input.vtt")
         return
 
-    input_file = sys.argv[1]
-    output_file = input_file.rsplit('.', 1)[0] + '_cht.' + input_file.rsplit('.', 1)[1]
+    # 修改輸入輸出路徑
+    input_file = os.path.join('source', sys.argv[1])
+    output_name = sys.argv[1].rsplit('.', 1)[0] + '_cht.' + sys.argv[1].rsplit('.', 1)[1]
+    output_file = os.path.join('output', output_name)
+
+    # 確保輸出目錄存在
+    os.makedirs('output', exist_ok=True)
 
     try:
         # 解析字幕

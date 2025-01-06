@@ -28,3 +28,15 @@ build/
 
 # Logs
 *.log 
+
+# VTT files to remove
+ta.vtt
+ta_cht.vtt
+
+# Source and Output directories content
+source/*
+output/*
+
+# But keep the directories
+!source/.gitkeep
+!output/.gitkeep 
